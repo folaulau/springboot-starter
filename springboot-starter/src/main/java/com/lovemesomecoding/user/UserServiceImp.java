@@ -101,13 +101,13 @@ public class UserServiceImp implements UserService {
 		user.addRole(role);
 
 		user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-		user.setUid(RandomGeneratorUtils.getUuid());
+		user.setUid(RandomGeneratorUtils.getUserUuid());
 		log.debug("user: {}", ObjectUtils.toJson(user));
 
 		user = this.create(user);
 
 		log.debug("saved user: {}", ObjectUtils.toJson(user));
-		JwtPayload jwtpayload = new JwtPayload(user, RandomGeneratorUtils.getUuid());
+		JwtPayload jwtpayload = new JwtPayload(user, RandomGeneratorUtils.getJwtUuid());
 
 		String clientUserAgent = HttpUtils.getRequestUserAgent(request);
 

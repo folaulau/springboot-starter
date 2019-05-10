@@ -120,7 +120,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 		
 		User user = this.userService.getByEmail(email);
 		
-		JwtPayload jwtpayload = new JwtPayload(user, RandomGeneratorUtils.getUuid());
+		JwtPayload jwtpayload = new JwtPayload(user, RandomGeneratorUtils.getJwtUuid());
 		jwtpayload.setDeviceId(clientUserAgent);
 		
 		String jwtToken = JwtTokenUtils.generateToken(jwtpayload);

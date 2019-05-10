@@ -28,7 +28,7 @@ public class UserLoader {
 		log.info("loadUsers...");
 		
 		User user = new User();
-		user.setUid(RandomGeneratorUtils.getUuid());
+		user.setUid(RandomGeneratorUtils.getUserUuid());
 		user.setEmail("folaukaveinga@gmail.com");
 		user.setPassword(PasswordUtils.hashPassword("test"));
 		Address address = new Address();
@@ -62,7 +62,7 @@ public class UserLoader {
 		
 		
 		user = new User();
-		user.setUid(RandomGeneratorUtils.getUuid());
+		user.setUid(RandomGeneratorUtils.getUserUuid());
 		user.setEmail("folaukaveinga+1@gmail.com");
 		user.setPassword(PasswordUtils.hashPassword("test"));
 		address = new Address();

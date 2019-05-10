@@ -3,6 +3,7 @@ package com.lovemesomecoding.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -51,78 +52,6 @@ public final class RandomGeneratorUtils {
 	public static String getAlphaNumeric(int length) {
 		return RandomStringUtils.randomAlphanumeric(length);
 	}
-
-	public static String getSecret(int length, int numOfSpecialCharacters) {
-		StringBuilder secret = new StringBuilder(RandomStringUtils.randomAlphanumeric(length - numOfSpecialCharacters));
-
-		if (numOfSpecialCharacters > 0) {
-			int size = specialCharacters.size();
-
-			for (int i = 0; i < numOfSpecialCharacters; i++) {
-				secret.append(specialCharacters.get(getIntegerWithin(0, size - 1)));
-			}
-
-		}
-		return secret.toString();
-	}
-
-	// 20 characters 4 pieces to ensure uniqueness
-	public static String getUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(5));
-		}
-		return uuid.toString();
-	}
-
-	// 20 characters 4 pieces to ensure uniqueness
-	public static String getAccountUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(5));
-		}
-		return uuid.toString();
-	}
-
-	// 12 characters 4 pieces to ensure uniqueness
-	public static String getCoverageUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(3));
-		}
-		return uuid.toString();
-	}
-	
-	// 12 characters 4 pieces to ensure uniqueness
-	public static String getMemberUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(3));
-		}
-		return uuid.toString();
-	}
-	
-	// 12 characters 4 pieces to ensure uniqueness
-	public static String getExpenseUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(3));
-		}
-		return uuid.toString();
-	}
-	
-	// 12 characters 4 pieces to ensure uniqueness
-	public static String getReceiptUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 4; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(3));
-		}
-		return uuid.toString();
-	}
-
-	public static boolean getBoolean() {
-		return RandomUtils.nextBoolean();
-	}
 	
 	public static List<Integer> getNumbersInRangeAndOffset(int start, int finish, int offset){
 		List<Integer> numbers = new ArrayList<>();
@@ -132,11 +61,20 @@ public final class RandomGeneratorUtils {
 		return numbers;
 	}
 
-	public static String getNtcUuid() {
-		StringBuilder uuid = new StringBuilder();
-		for (int i = 0; i < 5; i++) {
-			uuid.append(RandomStringUtils.randomAlphabetic(5));
-		}
-		return uuid.toString();
+//	public static String getUuid() {
+//		StringBuilder uuid = new StringBuilder();
+//		for (int i = 0; i < 4; i++) {
+//			uuid.append(RandomStringUtils.randomAlphabetic(5));
+//		}
+//		return uuid.toString();
+//	}
+	
+	public static String getUserUuid() {
+		return "user-"+UUID.randomUUID().toString()+"-"+RandomStringUtils.randomAlphabetic(10);
 	}
+	
+	public static String getJwtUuid() {
+		return "jwt-"+UUID.randomUUID().toString()+"-"+RandomStringUtils.randomAlphabetic(10);
+	}
+
 }
