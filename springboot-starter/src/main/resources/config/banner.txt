@@ -1,0 +1,4 @@
+Springboot - Starter                                                                                                                                                                                                  
+:: Running Spring Boot ${spring-boot.version} ::  
+:: Application version ${spring.application.version} ::                                                
+                                               
