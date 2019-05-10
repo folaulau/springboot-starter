@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @ GetException.java
+ * @ ProcessException.java
  * @ Project: SideCar Health Corporation
  *
  * Copyright (c) 2018 SideCar Health Corporation. - All Rights Reserved
@@ -18,28 +18,28 @@
 package com.lovemesomecoding.error;
 
 /**
- * GetException is an exception handler for getting resources such as GET
+ * ProcessException is an exception handler for processing resources such as POST, PUT, PATCH, DELETE
  * @author fkaveinga
  *
  */
-public class GetException extends RuntimeException {
+public class ApiException extends RuntimeException {
 	
-	private ApiErrorResponse error;
+	private ApiError error;
 
-	public GetException() {
+	public ApiException() {
 		this(null);
 	}
 
-	public GetException(ApiErrorResponse error) {
+	public ApiException(ApiError error) {
 		super(error.getMessage());
 		this.error = error;
 	}
 
-	public ApiErrorResponse getError() {
+	public ApiError getError() {
 		return error;
 	}
 
-	public void setError(ApiErrorResponse error) {
+	public void setError(ApiError error) {
 		this.error = error;
 	}
 }

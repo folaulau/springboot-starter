@@ -19,58 +19,57 @@ package com.lovemesomecoding.error;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lovemesomecoding.utils.DateTimeUtils;
+
+/**
+ * Reference - https://www.toptal.com/java/spring-boot-rest-api-error-handling <br>
+ * @author folaukaveinga
+ *
+ */
 
 @JsonInclude(value=Include.NON_NULL)
-public class ApiErrorResponse extends ApiResponse{
-	
-	public static final String DEFAULT_MSG = "Something went wrong. Please try again.";
+public class ApiError{
 
-	@JsonIgnore
 	private HttpStatus status;
 	
-	@JsonIgnore
-	private Date timestamp;
+	private String timestamp;
 	
-	//@JsonIgnore
-	//private String debugMessage;
-
-	//private List<ApiSubError> errors;
+	// message that ui displays to user
+	private String message;
 	
-	private List<String> errors;
+	// message for developers
+	private String debugMessage;
 	
-	public ApiErrorResponse() {
+	// errors on forms
+	private List<ApiSubError> errors;
+	
+	public ApiError() {
 		this(null,null);
 	}
 	
-	public ApiErrorResponse(String message) {
+	public ApiError(String message) {
 		this(null,message);
 	}
 	
-	public ApiErrorResponse(HttpStatus status, String message) {
+	public ApiError(HttpStatus status, String message) {
 		this(status,message,null);
 	}
 	
-	public ApiErrorResponse(HttpStatus status, String message, List<String> subErrors) {
-		this(status,message,null,subErrors);
+	public ApiError(HttpStatus status, String message, String debugMessage) {
+		this(status,message,debugMessage,null);
 	}
 	
-	public ApiErrorResponse(HttpStatus status, String message, String debugMessage, List<String> subErrors) {
-		this(status,message,debugMessage,subErrors,null);
-	}
-	
-	public ApiErrorResponse(HttpStatus status, String message,  String debugMessage, List<String> subErrors, Throwable ex) {
-		this.status = status;
+	public ApiError(HttpStatus status, String message, String debugMessage, List<ApiSubError> subErrors) {
+		this.status = (status==null) ? HttpStatus.BAD_REQUEST : status;
 		this.message = message;
-		this.timestamp = new Date();
+		this.timestamp = DateTimeUtils.getFormattedCurrentDateTime();
 		this.errors = subErrors;
-		//this.debugMessage = (debugMessage!=null) ? debugMessage : (ex!=null) ? ex.getLocalizedMessage() : null;
+		this.debugMessage = debugMessage;
 	}
 
 	public HttpStatus getStatus() {
@@ -81,11 +80,11 @@ public class ApiErrorResponse extends ApiResponse{
 		this.status = status;
 	}
 
-	public Date getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -97,23 +96,23 @@ public class ApiErrorResponse extends ApiResponse{
 		this.message = message;
 	}
 
-//	public String getDebugMessage() {
-//		return debugMessage;
-//	}
-//
-//	public void setDebugMessage(String debugMessage) {
-//		this.debugMessage = debugMessage;
-//	}
+	public String getDebugMessage() {
+		return debugMessage;
+	}
 
-	public List<String> getErrors() {
+	public void setDebugMessage(String debugMessage) {
+		this.debugMessage = debugMessage;
+	}
+
+	public List<ApiSubError> getErrors() {
 		return errors;
 	}
 
-	public void setErrors(List<String> subErrors) {
+	public void setErrors(List<ApiSubError> subErrors) {
 		this.errors = subErrors;
 	}
 	
-	public void addSubError(String subError) {
+	public void addSubError(ApiSubError subError) {
 		if(this.errors==null){
 			this.errors = new ArrayList<>();
 		}

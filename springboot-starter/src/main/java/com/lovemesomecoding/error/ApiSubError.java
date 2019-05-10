@@ -20,18 +20,35 @@ package com.lovemesomecoding.error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+/**
+ * Reference - https://www.toptal.com/java/spring-boot-rest-api-error-handling<br>
+ * @author folaukaveinga
+ *
+ */
 @JsonInclude(value=Include.NON_NULL)
 public class ApiSubError {
+	
+	// name of the object or entity
 	private String object;
+	
+	// name of the field
 	private String field;
+	
+	// value that is rejected
 	private Object rejectedValue;
+	
+	// error message to display
 	private String message;
 
-	ApiSubError(String object, String message) {
-		this(object, null, null, message);
+	public ApiSubError(String object, String message) {
+		this(object, message, null );
+	}
+	
+	public ApiSubError(String object, String message, String field) {
+		this(object, message, field, null);
 	}
 
-	public ApiSubError(String object, String field, Object rejectedValue, String message) {
+	public ApiSubError(String object, String message, String field, Object rejectedValue) {
 		super();
 		this.object = object;
 		this.field = field;

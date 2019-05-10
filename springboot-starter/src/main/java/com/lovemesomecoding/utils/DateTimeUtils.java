@@ -72,12 +72,17 @@ public class DateTimeUtils {
 		return (int) (different/DAY);
 	}
 	
-	public static String getFormattedDate(Date date) {
+	public static String getFormattedDateTime(Date date) {
 		DateFormat formmatter = new SimpleDateFormat("M-dd-yyyy h:mm:ss.SSS a");
 		return formmatter.format(date);
 	}
 	
-	public static String getUTCFormattedDate(Date date) {
+	public static String getFormattedCurrentDateTime() {
+		DateFormat formmatter = new SimpleDateFormat("M-dd-yyyy h:mm:ss.SSS a");
+		return formmatter.format(new Date());
+	}
+	
+	public static String getUTCFormattedDateTime(Date date) {
 		DateFormat formmatter = new SimpleDateFormat(UTC_FORMAT);
 		return formmatter.format(date);
 	}
