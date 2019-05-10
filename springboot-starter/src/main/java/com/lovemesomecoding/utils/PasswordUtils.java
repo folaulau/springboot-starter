@@ -20,7 +20,7 @@ public final class PasswordUtils {
 	 * Password for development only
 	 */
 	public static String hashPassword(final String password) {
-		if (password == null || password.length() < 1 || ValidationUtils.isValidPassword(password) == false) {
+		if (password == null || password.length() < 1) {
 			throw new RuntimeErrorException(null, "Password must not be valid");
 		}
 		return passwordEncoder.encode(password);
