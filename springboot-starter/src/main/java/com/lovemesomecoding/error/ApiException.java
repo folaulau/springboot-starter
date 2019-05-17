@@ -22,6 +22,7 @@ package com.lovemesomecoding.error;
  * @author fkaveinga
  *
  */
+@SuppressWarnings("serial")
 public class ApiException extends RuntimeException {
 	
 	private ApiError error;

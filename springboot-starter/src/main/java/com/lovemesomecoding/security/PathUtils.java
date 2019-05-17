@@ -2,7 +2,17 @@ package com.lovemesomecoding.security;
 
 public class PathUtils {
 
-	public static final String LOGIN_URL = "/login";
+public static final String LOGIN_URL = "/users/login";
+	
+	public static final String LOGOUT_URL ="/users/logout";
+	
+	public static final String SIGNUP_URL ="/users/signup";
+	
+	public static final String[] TEST_URLS = {
+            "/tests/**",
+			"/tests/generate-basic-auth-token",
+            "/tests/system/session"
+    };
 	
 	public static final String[] PUBLIC_URLS = {"/**"};
 	
