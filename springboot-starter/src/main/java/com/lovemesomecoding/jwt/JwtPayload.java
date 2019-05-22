@@ -29,6 +29,8 @@ public class JwtPayload implements Serializable {
 	
 	private String uid;
 	
+	private Long id;
+	
 	private String deviceId;
 	
 	private List<String> authorities;
@@ -119,6 +121,14 @@ public class JwtPayload implements Serializable {
 
 	public void setUid(String uid) {
 		this.uid = uid;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public List<String> getAuthorities() {

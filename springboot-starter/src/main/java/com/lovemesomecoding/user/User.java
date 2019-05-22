@@ -17,19 +17,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lovemesomecoding.address.Address;
 import com.lovemesomecoding.role.Role;
+import com.lovemesomecoding.utils.ApiSessionUtils;
 
 @JsonInclude(value = Include.NON_NULL)
+@Where(clause = "deleted = 'F'")
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -40,29 +47,39 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, updatable = false, unique = true)
 	private Long id;
-	
-	@Column(name = "uid", unique = true, nullable=false, updatable=false)
+
+	@Column(name = "uid", unique = true, nullable = false, updatable = false)
 	private String uid;
 
-	@Column(name = "email", nullable=false, unique=true)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
-	
-	@Column(name = "password", nullable=false)
-	private String password;
-	
-	@JsonIgnoreProperties(value= {"user"})
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="address_id")
-	private Address address;
-	
 
-	@JsonIgnoreProperties(value= {"users"})
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinTable(
-	        name = "user_roles",
-	        joinColumns = { @JoinColumn(name = "user_id") },
-	        inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	@Column(name = "password", nullable = false)
+	private String password;
+
+	@JsonIgnoreProperties(value = { "user" })
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
+	private Address address;
+
+	@JsonIgnoreProperties(value = { "users" })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id") })
 	private Set<Role> roles;
+
+	@Column(name = "created_by")
+	private Long createdBy;
+
+	@Column(name = "updated_by")
+	private Long updatedBy;
+
+	@Column(name = "deleted_by")
+	private Long deletedBy;
+	
+	@Type(type = "true_false")
+	@Column(name = "deleted", nullable = false)
+	private boolean deleted;
 
 	public User() {
 		super();
@@ -92,7 +109,7 @@ public class User implements Serializable {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -100,9 +117,9 @@ public class User implements Serializable {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	
+
 	public void addRole(Role role) {
-		if(this.roles == null){
+		if (this.roles == null) {
 			this.roles = new HashSet<>();
 		}
 		this.roles.add(role);
@@ -123,18 +140,50 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	public List<String> getAuthorities() {
 		List<String> authorities = new ArrayList<>();
-		if(this.roles==null) {
+		if (this.roles == null) {
 			return authorities;
 		}
-		
-		for(Role role : roles) {
+
+		for (Role role : roles) {
 			authorities.add(role.getAuthority());
 		}
-		
+
 		return authorities;
+	}
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Long getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Long getDeletedBy() {
+		return deletedBy;
+	}
+
+	public void setDeletedBy(Long deletedBy) {
+		this.deletedBy = deletedBy;
 	}
 
 	@Override
@@ -161,8 +210,24 @@ public class User implements Serializable {
 			return false;
 		}
 		User other = (User) obj;
-		return new EqualsBuilder().append(this.id, other.id).append(this.email, other.email)
-				.append(this.uid, other.uid).isEquals();
+		return new EqualsBuilder().append(this.id, other.id).append(this.email, other.email).append(this.uid, other.uid)
+				.isEquals();
+	}
+
+	@PrePersist
+	private void preCreate() {
+		this.createdBy = ApiSessionUtils.getCreateBy();
+		this.updatedBy = this.createdBy;
+	}
+
+	@PreUpdate
+	private void preUpdate() {
+		this.updatedBy = ApiSessionUtils.getCreateBy();
+		
+		if(this.isDeleted()) {
+			this.deletedBy = this.updatedBy;
+		}
+		
 	}
 
 }

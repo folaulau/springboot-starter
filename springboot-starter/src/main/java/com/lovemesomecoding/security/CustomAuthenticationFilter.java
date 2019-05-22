@@ -37,6 +37,9 @@ import com.lovemesomecoding.utils.ObjectUtils;
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
+	// @Autowired
+	// private JwtMapper jwtMapper;
+
 	/**
 	 * Handle token missing error <br>
 	 * Handle cached user not found error <br>
@@ -63,7 +66,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		JwtPayload jwtPayload = JwtTokenUtils.getJetPayload(token);
+		JwtPayload jwtPayload = JwtTokenUtils.validateToken(token);
 
 		if (jwtPayload == null) {
 			ObjectNode erroMsg = ObjectUtils.getObjectNode();
@@ -76,16 +79,14 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		log.debug("jwtPayload: {}", ObjectUtils.toJson(jwtPayload));
+		log.debug("valid request, jwtPayload: {}", ObjectUtils.toJson(jwtPayload));
 
-		Authentication authentication = getAuthentication(request, jwtPayload);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		setRequestSecurityAuthentication(jwtPayload);
 
 		filterChain.doFilter(request, response);
 	}
 
-	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request, JwtPayload jwtPayload) {
+	private void setRequestSecurityAuthentication(JwtPayload jwtPayload) {
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		if (jwtPayload.getAuthorities() != null || jwtPayload.getAuthorities().isEmpty() == false) {
@@ -93,6 +94,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 				authorities.add(new SimpleGrantedAuthority(role.toUpperCase()));
 			}
 		}
-		return new UsernamePasswordAuthenticationToken(jwtPayload, jwtPayload.getUid(), authorities);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(jwtPayload, jwtPayload.getUid(), authorities));
 	}
 }
