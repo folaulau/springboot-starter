@@ -1,6 +1,8 @@
 package com.lovemesomecoding.security;
 
 import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -73,14 +75,27 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         log.debug("member found for {}", email);
 
+        int invalidPasswordCounter = Optional.ofNullable(user.getInvalidPasswordCounter()).orElse(0);
+
         if (user.getPassword() == null || !PasswordUtils.verify(password, user.getPassword())) {
             log.debug("Password is invalid");
+
+            user.setInvalidPasswordCounter(invalidPasswordCounter + 1);
+            this.userDAO.save(user);
+
             throw new BadCredentialsException("Email or password is invalid");
         }
 
         if (UserStatus.isActive(user.getStatus()) == false) {
             log.debug("Your account has beeen deactivated");
             throw new DisabledException("Your account has beeen deactivated");
+        }
+
+        // =============== Valid Username and Password =============
+
+        if (invalidPasswordCounter > 0) {
+            user.setInvalidPasswordCounter(0);
+            this.userDAO.save(user);
         }
 
         UsernamePasswordAuthenticationToken userAuthToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());

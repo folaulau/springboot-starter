@@ -2,9 +2,14 @@ package com.lovemesomecoding.enitity.user;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,9 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lovemesomecoding.dto.AuthenticationResponseDTO;
+import com.lovemesomecoding.dto.CustomPage;
+import com.lovemesomecoding.dto.EntityDTOMapper;
 import com.lovemesomecoding.dto.SignUpDTO;
 import com.lovemesomecoding.dto.UserDTO;
+import com.lovemesomecoding.dto.UserSessionDTO;
 import com.lovemesomecoding.dto.UserUpdateDTO;
+import com.lovemesomecoding.enitity.user.session.UserSession;
+import com.lovemesomecoding.enitity.user.session.UserSessionService;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import io.swagger.annotations.Api;
@@ -37,7 +47,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserRestController {
 
     @Autowired
-    private UserService userService;
+    private UserService        userService;
+
+    @Autowired
+    private UserSessionService userSessionService;
+
+    @Autowired
+    private EntityDTOMapper    entityDTOMapper;
 
     /**
      * sign up
@@ -52,13 +68,14 @@ public class UserRestController {
 
         return new ResponseEntity<>(userAuthenticationSuccessDTO, OK);
     }
-    
+
     /**
      * log in
      */
     @ApiOperation(value = "Log In")
     @PostMapping(value = "/users/login")
-    public ResponseEntity<AuthenticationResponseDTO> login(@RequestHeader(name = "x-api-key", required = true) String xApiKey,@RequestParam(name = "type", required = true) String loginType,@RequestHeader(name = "Authorization", required = true) String authorization) {
+    public ResponseEntity<AuthenticationResponseDTO> login(@RequestHeader(name = "x-api-key", required = true) String xApiKey, @RequestParam(name = "type", required = true) String loginType,
+            @RequestHeader(name = "Authorization", required = true) String authorization) {
         log.info("login authorization={}", ObjMapperUtils.toJson(authorization));
         return new ResponseEntity<>(OK);
     }
@@ -108,6 +125,62 @@ public class UserRestController {
         UserDTO userDTO = userService.updateCoverImage(uuid, file);
 
         return new ResponseEntity<>(userDTO, OK);
+    }
+
+    @ApiOperation(value = "Log out")
+    @PutMapping(value = "/users/logout")
+    public ResponseEntity<Boolean> logOut(@RequestParam("token") String token) {
+        log.info("logOut {}", token);
+
+        return new ResponseEntity<>(new Boolean(true), OK);
+    }
+
+    @ApiOperation(value = "Get user active sessions")
+    @GetMapping(value = "/users/{uuid}/sessions/active")
+    public ResponseEntity<CustomPage<UserSessionDTO>> getUserActiveSessions(@RequestHeader("token") String token,
+            @ApiParam(name = "page", value = "page", defaultValue = "0") @RequestParam(required = false, name = "page", defaultValue = "0") Integer pageNumber,
+            @ApiParam(name = "size", value = "size", defaultValue = "20") @RequestParam(required = false, name = "size", defaultValue = "20") Integer pageSize, @PathVariable String uuid) {
+        log.info("getUserActiveSessions, uuid={}", uuid);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<UserSession> page = userSessionService.getActiveSessionsByUserUuid(uuid, pageable);
+        
+        List<UserSessionDTO> ssnDtos = null;
+
+        if (page != null && page.hasContent()) {
+            ssnDtos = entityDTOMapper.mapUserSessionsToUserSessionDTOs(page.getContent());
+        } else {
+            ssnDtos = new ArrayList<>();
+        }
+
+        CustomPage<UserSessionDTO> result = new CustomPage<UserSessionDTO>(new PageImpl<UserSessionDTO>(ssnDtos, pageable, page.getTotalElements()));
+
+        return new ResponseEntity<>(result, OK);
+    }
+
+    @ApiOperation(value = "Get user sessions")
+    @GetMapping(value = "/users/{uuid}/sessions")
+    public ResponseEntity<CustomPage<UserSessionDTO>> getUserSessions(@RequestHeader("token") String token,
+            @ApiParam(name = "page", value = "page", defaultValue = "0") @RequestParam(required = false, name = "page", defaultValue = "0") Integer pageNumber,
+            @ApiParam(name = "size", value = "size", defaultValue = "20") @RequestParam(required = false, name = "size", defaultValue = "20") Integer pageSize, @PathVariable String uuid) {
+        log.info("getUserActiveSessions, uuid={}", uuid);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<UserSession> page = userSessionService.getSessionsByUserUuid(uuid, pageable);
+
+        List<UserSessionDTO> ssnDtos = null;
+
+        if (page != null && page.hasContent()) {
+            ssnDtos = entityDTOMapper.mapUserSessionsToUserSessionDTOs(page.getContent());
+        } else {
+            ssnDtos = new ArrayList<>();
+        }
+
+        CustomPage<UserSessionDTO> result = new CustomPage<UserSessionDTO>(new PageImpl<UserSessionDTO>(ssnDtos, pageable, page.getTotalElements()));
+
+        return new ResponseEntity<>(result, OK);
     }
 
 }

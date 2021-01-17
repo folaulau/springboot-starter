@@ -37,14 +37,11 @@ public final class JwtTokenUtils {
     public static String generateToken(JwtPayload payload) {
 
         try {
-            log.debug("payload={}", ObjMapperUtils.toJson(payload));
             String token = JWT.create()
                     .withExpiresAt(DateUtils.addMinutes(new Date(), LIFE_TIME))
                     .withIssuedAt(new Date())
                     .withJWTId(payload.getJti())
-                    .withClaim("cud", payload.getCud())
                     .withSubject(payload.getSub())
-                    .withAudience(payload.getUserRolesAsArray())
                     .withIssuer(ISSUER)
                     .sign(ALGORITHM);
             return token;
@@ -58,7 +55,6 @@ public final class JwtTokenUtils {
     }
 
     public static JwtPayload getPayloadByToken(String token) {
-        log.debug("getPayloadByToken({})", token);
         if (token == null || token.length() == 0) {
             return null;
         }
@@ -67,7 +63,6 @@ public final class JwtTokenUtils {
 
             // Reusable verifier instance
             DecodedJWT jwt = VERIFIER.verify(token);
-            log.info("jwt={}",ObjMapperUtils.toJson(jwt));
             if (jwt != null) {
                 JwtPayload jwtPayload = new JwtPayload();
                 jwtPayload.setExp(jwt.getExpiresAt());
@@ -75,8 +70,6 @@ public final class JwtTokenUtils {
                 jwtPayload.setJti(jwt.getId());
                 jwtPayload.setIat(jwt.getIssuedAt());
                 jwtPayload.setSub(jwt.getSubject());
-                jwtPayload.setCud(jwt.getClaim("cud").asString());
-                jwtPayload.setAud(new HashSet<>(jwt.getAudience()));
 
                 return jwtPayload;
             }

@@ -1,6 +1,7 @@
 package com.lovemesomecoding.exception;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,11 @@ public class ApiErrorResponse extends ApiDefaultResponseDTO {
     }
 
     public ApiErrorResponse(HttpStatus status, String message) {
-        this(status, message, null);
+        this(status, message, Arrays.asList());
+    }
+
+    public ApiErrorResponse(HttpStatus status, String message, String... subErrors) {
+        this(status, message, null, Arrays.asList(subErrors));
     }
 
     public ApiErrorResponse(HttpStatus status, String message, List<String> subErrors) {

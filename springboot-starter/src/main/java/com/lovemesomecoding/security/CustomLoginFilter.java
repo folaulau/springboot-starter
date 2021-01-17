@@ -24,6 +24,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.lovemesomecoding.cache.CacheService;
 import com.lovemesomecoding.dto.AuthenticationResponseDTO;
 import com.lovemesomecoding.enitity.user.User;
 import com.lovemesomecoding.exception.ApiErrorResponse;
@@ -43,6 +44,9 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private CacheService          cacheService;
 
     private Map<String, String>   authenticationDetails = new HashMap<>();
 

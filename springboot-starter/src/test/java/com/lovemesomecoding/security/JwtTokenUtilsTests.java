@@ -19,11 +19,8 @@ public class JwtTokenUtilsTests {
     public void test_generateToken_valid() {
         String jti = "test-jti";
         String uuid = "test-uuid";
-        String cud = "test-cud";
-        Set<String> aud = new HashSet<String>();
-        aud.add("USER");
 
-        JwtPayload payload = new JwtPayload(jti, uuid, cud, aud);
+        JwtPayload payload = new JwtPayload(jti, uuid);
 
         String token = JwtTokenUtils.generateToken(payload);
 
@@ -45,10 +42,7 @@ public class JwtTokenUtilsTests {
     public void test_getPayloadByToken_valid() {
         String jti = "test-jti";
         String uuid = "test-uuid";
-        String cud = "test-cud";
-        Set<String> aud = new HashSet<String>();
-        aud.add("USER");
-        JwtPayload payload = new JwtPayload(jti, uuid, cud, aud);
+        JwtPayload payload = new JwtPayload(jti, uuid);
 
         log.info("payload={}", ObjMapperUtils.toJson(payload));
 
@@ -66,10 +60,6 @@ public class JwtTokenUtilsTests {
         assertThat(updatedPayload).isNotNull();
         assertThat(updatedPayload.getJti()).isEqualTo("test-jti");
         assertThat(updatedPayload.getSub()).isEqualTo("test-uuid");
-        assertThat(updatedPayload.getCud()).isEqualTo("test-cud");
-
-        assertThat(updatedPayload.getAud()).isNotNull();
-        assertThat(updatedPayload.getUserRolesAsArray()).isNotNull().isEqualTo(new String[]{"USER"});
 
     }
 

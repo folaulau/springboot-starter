@@ -36,7 +36,7 @@ public class ApiException extends RuntimeException {
 
     public ApiException(String message) {
         super(message);
-        this.error = new ApiErrorResponse(HttpStatus.BAD_REQUEST, message, null);
+        this.error = new ApiErrorResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     public ApiException(String message, List<String> subErrors) {

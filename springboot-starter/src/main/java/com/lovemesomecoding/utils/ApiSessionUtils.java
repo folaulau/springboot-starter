@@ -31,27 +31,27 @@ public interface ApiSessionUtils {
     // *
     // * @param sidecarBrokerApiSession
     // */
-    public static void setSessionToken(WebAuthenticationDetails authDetails, JwtPayload jwtPayload) {
+    public static void setSessionToken(WebAuthenticationDetails authDetails, ApiSession apiSession) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (jwtPayload.getAud() != null || jwtPayload.getAud().isEmpty() == false) {
-            for (String role : jwtPayload.getAud()) {
+        if (apiSession.getUserRoles() != null || apiSession.getUserRoles().isEmpty() == false) {
+            for (String role : apiSession.getUserRoles()) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
             }
         }
 
-        UsernamePasswordAuthenticationToken updateAuth = new UsernamePasswordAuthenticationToken(jwtPayload, jwtPayload.getSub(), authorities);
+        UsernamePasswordAuthenticationToken updateAuth = new UsernamePasswordAuthenticationToken(apiSession, apiSession.getUserUuid(), authorities);
 
         updateAuth.setDetails(authDetails);
 
         SecurityContextHolder.getContext().setAuthentication(updateAuth);
     }
 
-    public static JwtPayload getApiSession() {
+    public static ApiSession getApiSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             try {
-                JwtPayload session = (JwtPayload) auth.getPrincipal();
+                ApiSession session = (ApiSession) auth.getPrincipal();
                 return session;
             } catch (Exception e) {
                 log.warn("Exception, msg={}", e.getLocalizedMessage());
@@ -65,8 +65,8 @@ public interface ApiSessionUtils {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             try {
-                JwtPayload session = (JwtPayload) auth.getPrincipal();
-                return session.getSub();
+                ApiSession session = (ApiSession) auth.getPrincipal();
+                return session.getUserUuid();
             } catch (Exception e) {
                 log.warn("Exception, msg={}", e.getLocalizedMessage());
             }

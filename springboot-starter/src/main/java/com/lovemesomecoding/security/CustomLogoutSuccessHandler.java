@@ -27,7 +27,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.debug("Logout Success");
-        ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiDefaultResponseDTO());
+        ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new Boolean(true));
     }
 
 }

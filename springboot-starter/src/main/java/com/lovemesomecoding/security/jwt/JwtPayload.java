@@ -1,22 +1,7 @@
-/*******************************************************************************
- * @ JwtPayload.java @ Project: SideCar Health Corporation
- *
- *   Copyright (c) 2018 SideCar Health Corporation. - All Rights Reserved El Segundo, California, U.S.A.
- *
- *   This software is the confidential and proprietary information of SideCar Health Corporation. ("Confidential
- *   Information").
- *
- *   You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the
- *   license agreement you entered into with SideCar Corporation.
- *
- *   Contributors: SideCar Health Corporation. - Software Engineering Team
- ******************************************************************************/
 package com.lovemesomecoding.security.jwt;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-import java.util.StringJoiner;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -44,7 +29,7 @@ import lombok.ToString;
 @JsonInclude(value = Include.NON_NULL)
 public class JwtPayload implements Serializable {
 
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = 1L;
 
     // issuer
     private String            iss;
@@ -64,21 +49,8 @@ public class JwtPayload implements Serializable {
     // not before
     private Date              nbf;
 
-    // cud - user agent(where user is authenticated from)
-    private String            cud;
-
-    // aud - user roles
-    private Set<String>       aud;
-
-    public JwtPayload(String jti, String uuid, String cud, Set<String> aud) {
-        this(null, jti, uuid, null, null, null, cud, aud);
-    }
-
-    public String[] getUserRolesAsArray() {
-        int size = aud.size();
-        String strRoles[] = new String[size];
-        System.arraycopy(aud.toArray(), 0, strRoles, 0, size);
-        return strRoles;
+    public JwtPayload(String jti, String uuid) {
+        this(null, jti, uuid, null, null, null);
     }
 
     public String toJson() {
