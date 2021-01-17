@@ -118,15 +118,11 @@ public class SignupMockTests {
 
         Mockito.when(authenticationService.authenticate(Mockito.any(User.class))).thenReturn(new AuthenticationResponseDTO());
 
-        AuthenticationResponseDTO authenticationResponseDTO = userService.signUp(signUpDTO);
-
-        log.info("authenticationResponseDTO={}", ObjMapperUtils.toJson(authenticationResponseDTO));
+        userService.signUp(signUpDTO);
 
         Mockito.verify(userDAO).save(savedUserCaptor.capture());
 
         User savedUser = savedUserCaptor.getValue();
-
-        log.info("savedUser={}", ObjMapperUtils.toJson(savedUser));
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getEmail()).isNotNull().isEqualTo("folaudev@gmail.com");
