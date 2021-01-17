@@ -20,18 +20,8 @@ public class HttpRequestInterceptor implements ClientHttpRequestInterceptor {
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
 			throws IOException {
 		logRequest(request, body);
-		ClientHttpResponse response = null;
-		try {
-			response = execution.execute(request, body);
-		} catch (Exception e) {
-			log.error("Failed rest call", e);
-			throw e;
-		} finally {
-			if (response != null) {
-				logResponse(response);
-			}
-		}
-		
+		ClientHttpResponse response = execution.execute(request, body);
+		logResponse(response);
 		return response;
 	}
 
@@ -56,14 +46,23 @@ public class HttpRequestInterceptor implements ClientHttpRequestInterceptor {
 	}
 
 	private String logResponse(ClientHttpResponse response) throws IOException {
+		StringBuilder result = new StringBuilder();
+
 		if (log.isInfoEnabled()) {
+
 			try {
 				System.out.println();
 				System.out.println(
 						"===========================Http Response begin============================================");
 				System.out.println("Status code  :" + response.getStatusCode());
+				System.out.println("Status code value  :" + response.getStatusCode().value());
 				System.out.println("Headers      :" + response.getHeaders());
 
+			} catch (Exception e) {
+				log.warn("Exception msg: {}", e.getMessage());
+			}
+
+			try {
 				InputStream inputStream = response.getBody();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 				StringBuilder out = new StringBuilder();
@@ -77,14 +76,15 @@ public class HttpRequestInterceptor implements ClientHttpRequestInterceptor {
 				System.out.println(
 						"===========================Http Response end==============================================");
 				System.out.println();
-				return out.toString();
+
+				result.append(out.toString());
 			} catch (Exception e) {
 				log.warn("Exception msg: {}", e.getMessage());
-				return e.getLocalizedMessage();
+				result.append(e.getLocalizedMessage());
 			}
 
 		}
-		return "";
+		return result.toString();
 	}
 
 }

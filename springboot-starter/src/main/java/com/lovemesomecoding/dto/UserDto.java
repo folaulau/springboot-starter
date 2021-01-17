@@ -1,75 +1,75 @@
 package com.lovemesomecoding.dto;
 
-import com.lovemesomecoding.address.Address;
+import java.io.Serializable;
+import java.util.Date;
 
-public class UserDto {
-	
-	private String uid;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lovemesomecoding.enitity.user.UserGender;
+import com.lovemesomecoding.enitity.user.UserMaritalStatus;
+import com.lovemesomecoding.enitity.user.UserStatus;
 
-	private String name;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-	private String email;
+@JsonInclude(value = Include.NON_NULL)
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDTO implements Serializable {
 
-	private int age;
-	
-	private Address address;
-	
-	public UserDto() {
-		this(null,null,null,0);
-	}
-	
-	public UserDto(String uid, String name, String email, int age) {
-		this(uid,name,email,age,null);
-	}
+    private static final long serialVersionUID       = 1L;
 
-	public UserDto(String uid, String name, String email, int age, Address address) {
-		super();
-		this.uid = uid;
-		this.name = name;
-		this.email = email;
-		this.age = age;
-		this.address = address;
-	}
+    private Long              id;
+
+    private String            uuid;
+
+    private String            firstName;
+
+    private String            middleName;
+
+    private String            lastName;
+
+    private String            email;
+
+    private Boolean           emailVerified;
+
+    private String            phoneNumber;
+
+    private Boolean           phoneVerified;
+
+    private Date              dateOfBirth;
+
+    private UserStatus        status;
+
+    private UserGender        gender;
+
+    private String            profileImageUrl;
+
+    private String            coverImageUrl;
+
+    private Date              passwordExpirationDate;
+
+    private Integer           invalidPasswordCounter = 0;
+
+    private AddressDTO        address;
+
+    private String            aboutMe;
+
+    private boolean           deleted;
+
+    private Date              createdAt;
+
+    private Date              updatedAt;
+
+    private Long              createdBy;
+
+    private Long              updatedBy;
 
 
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
 }

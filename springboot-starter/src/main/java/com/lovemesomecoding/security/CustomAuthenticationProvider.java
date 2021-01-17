@@ -1,31 +1,22 @@
 package com.lovemesomecoding.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.lovemesomecoding.role.Role;
-import com.lovemesomecoding.user.User;
-import com.lovemesomecoding.user.UserService;
-import com.lovemesomecoding.utils.ObjectUtils;
+import com.lovemesomecoding.enitity.user.User;
+import com.lovemesomecoding.enitity.user.UserDAO;
+import com.lovemesomecoding.enitity.user.UserStatus;
 import com.lovemesomecoding.utils.PasswordUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * CustomAuthenticationProvider
@@ -33,81 +24,74 @@ import com.lovemesomecoding.utils.PasswordUtils;
  * @author fkaveinga
  *
  */
+@Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-	private Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserDAO userDAO;
 
-	/**
-	 * Authenticate user by credentials
-	 * 
-	 * @author fkaveinga
-	 * @return Authentication
-	 */
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		log.info("authenticate(...)");
-		
-		String email = authentication.getPrincipal().toString();
-		String password = authentication.getCredentials().toString();
-		
-		log.info("email: {}", email);
-		log.info("password: {}", password);
-		
-		Map<String, String> details = (Map) authentication.getDetails();
-		log.debug("details: {}", ObjectUtils.toJson(details));
-		
-		return loginWithPassword(email, password);
-	}
+    /**
+     * Authenticate user by credentials
+     * 
+     * @author fkaveinga
+     * @return Authentication
+     */
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.debug("authenticate(...)");
+        Map<String, String> details = (Map) authentication.getDetails();
+        String type = details.get("type");
+        log.debug("authentication type: {}", type);
 
-	private Authentication loginWithPassword(String email, String password) {
-		log.info("loginWithPassword({})", email);
-		Optional<User> optUser = userService.findByEmail(email);
+        switch (type) {
+            case "password":
+                String email = authentication.getPrincipal().toString();
+                String password = authentication.getCredentials().toString();
+                return loginWithPassword(email, password);
+            default:
+                throw new BadCredentialsException("Username or password is invalid");
+        }
+    }
 
-		if (!optUser.isPresent()) {
-			log.info("user not found");
-			throw new UsernameNotFoundException("Username or password is invalid");
-		}
-		
-		log.info("user found for {}", email);
-		
-		User user = optUser.get();
-		
-		log.info("user: {}", ObjectUtils.toJson(user));
-		
-		if (user.getPassword() == null || !PasswordUtils.verify(password, user.getPassword())) {
-			log.info("login credentials not matched");
-			throw new BadCredentialsException("Username or password is invalid");
-		}
+    private Authentication loginAdminWithPassword(String email, String password) {
+        log.debug("loginAdminWithPassword({})", email);
+        User user = null;
+        UsernamePasswordAuthenticationToken userAuthToken = new UsernamePasswordAuthenticationToken(user.getEmail(), password);
+        userAuthToken.setDetails(user);
+        return userAuthToken;
+    }
 
-		return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), generateAuthorities(user.getRoles()));
-	}
-	
+    private Authentication loginWithPassword(String email, String password) {
+        log.debug("loginWithPassword({})", email);
+        User user = userDAO.getByEmail(email);
 
-	/**
-	 * Get Authorities for User
-	 * 
-	 * @param user
-	 * @return List<GrantedAuthority>
-	 */
-	private List<GrantedAuthority> generateAuthorities(Set<Role> roles) {
-		List<GrantedAuthority> authorities = new ArrayList<>();
+        if (user == null) {
+            log.debug("user not found");
+            throw new UsernameNotFoundException("Email or password is invalid");
+        }
 
-		if (roles.isEmpty()) {
-			throw new InsufficientAuthenticationException("No role");
-		} else {
-			for (Role role : roles) {
-				authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getAuthority().toUpperCase()));
-			}
-		}
-		return authorities;
-	}
+        log.debug("member found for {}", email);
 
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
+        if (user.getPassword() == null || !PasswordUtils.verify(password, user.getPassword())) {
+            log.debug("Password is invalid");
+            throw new BadCredentialsException("Email or password is invalid");
+        }
+
+        if (UserStatus.isActive(user.getStatus()) == false) {
+            log.debug("Your account has beeen deactivated");
+            throw new DisabledException("Your account has beeen deactivated");
+        }
+
+        UsernamePasswordAuthenticationToken userAuthToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        userAuthToken.setDetails(user);
+
+        return userAuthToken;
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 
 }

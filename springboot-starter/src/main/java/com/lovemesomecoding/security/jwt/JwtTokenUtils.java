@@ -1,0 +1,88 @@
+package com.lovemesomecoding.security.jwt;
+
+import java.util.Date;
+import java.util.HashSet;
+
+import org.apache.commons.lang3.time.DateUtils;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lovemesomecoding.utils.ObjMapperUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public final class JwtTokenUtils {
+
+    private static final String      secret    = "pizzaria-api-springboot";
+
+    private static final Algorithm   ALGORITHM = Algorithm.HMAC256(secret);
+
+    private static final String      ISSUER    = "pizzaria-api";
+
+    private static final int         LIFE_TIME = 100;
+
+    private static final JWTVerifier VERIFIER  = JWT.require(ALGORITHM).withIssuer(ISSUER).build();
+
+    /**
+     * Use JwtPayload to generate a jwt token
+     * 
+     * @param payload
+     *            - JwtPayload
+     * @return token - String
+     */
+    public static String generateToken(JwtPayload payload) {
+
+        try {
+            log.debug("payload={}", ObjMapperUtils.toJson(payload));
+            String token = JWT.create()
+                    .withExpiresAt(DateUtils.addMinutes(new Date(), LIFE_TIME))
+                    .withIssuedAt(new Date())
+                    .withJWTId(payload.getJti())
+                    .withClaim("cud", payload.getCud())
+                    .withSubject(payload.getSub())
+                    .withAudience(payload.getUserRolesAsArray())
+                    .withIssuer(ISSUER)
+                    .sign(ALGORITHM);
+            return token;
+        } catch (JWTCreationException e) {
+            log.warn("JWTCreationException, msg: {}", e.getLocalizedMessage());
+            return null;
+        } catch (Exception e) {
+            log.warn("Exception, msg: {}", e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static JwtPayload getPayloadByToken(String token) {
+        log.debug("getPayloadByToken({})", token);
+        if (token == null || token.length() == 0) {
+            return null;
+        }
+
+        try {
+
+            // Reusable verifier instance
+            DecodedJWT jwt = VERIFIER.verify(token);
+            log.info("jwt={}",ObjMapperUtils.toJson(jwt));
+            if (jwt != null) {
+                JwtPayload jwtPayload = new JwtPayload();
+                jwtPayload.setExp(jwt.getExpiresAt());
+                jwtPayload.setIss(jwt.getIssuer());
+                jwtPayload.setJti(jwt.getId());
+                jwtPayload.setIat(jwt.getIssuedAt());
+                jwtPayload.setSub(jwt.getSubject());
+                jwtPayload.setCud(jwt.getClaim("cud").asString());
+                jwtPayload.setAud(new HashSet<>(jwt.getAudience()));
+
+                return jwtPayload;
+            }
+        } catch (Exception e) {
+            log.warn("Exception, msg: {}", e.getLocalizedMessage());
+        }
+        return null;
+    }
+}
