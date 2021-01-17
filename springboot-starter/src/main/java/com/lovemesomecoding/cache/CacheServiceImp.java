@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.lovemesomecoding.utils.ApiSession;
+import com.lovemesomecoding.dto.helper.ApiSession;
 
 import lombok.extern.slf4j.Slf4j;
 

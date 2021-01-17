@@ -20,6 +20,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import com.lovemesomecoding.dto.helper.ApiSession;
 import com.lovemesomecoding.security.jwt.JwtPayload;
 
 public interface ApiSessionUtils {

@@ -1,4 +1,4 @@
-package com.lovemesomecoding.utils;
+package com.lovemesomecoding.dto.helper;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

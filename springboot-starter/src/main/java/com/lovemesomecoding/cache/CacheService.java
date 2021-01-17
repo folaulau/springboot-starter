@@ -3,7 +3,7 @@ package com.lovemesomecoding.cache;
 import java.util.Map;
 import java.util.Optional;
 
-import com.lovemesomecoding.utils.ApiSession;
+import com.lovemesomecoding.dto.helper.ApiSession;
 
 public interface CacheService {
 

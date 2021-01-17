@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import com.lovemesomecoding.utils.ApiSession;
+
+import com.lovemesomecoding.dto.helper.ApiSession;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 
