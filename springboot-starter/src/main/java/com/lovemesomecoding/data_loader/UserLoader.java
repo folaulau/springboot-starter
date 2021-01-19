@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.data_loader;
 
 import java.time.Instant;
 import java.util.Date;
@@ -7,9 +7,15 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.lovemesomecoding.enitity.user.User;
+import com.lovemesomecoding.enitity.user.UserDAO;
+import com.lovemesomecoding.enitity.user.UserGender;
+import com.lovemesomecoding.enitity.user.UserMaritalStatus;
+import com.lovemesomecoding.enitity.user.UserStatus;
 import com.lovemesomecoding.entity.address.Address;
 import com.lovemesomecoding.entity.user.role.Authority;
 import com.lovemesomecoding.entity.user.role.Role;
@@ -22,14 +28,15 @@ import com.lovemesomecoding.utils.PasswordUtils;
  *
  */
 @Profile({"local"})
-@Component(value = "userLoader")
-public class UserLoader {
+public class UserLoader implements CommandLineRunner {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDAO userDAO;
 
-    @PostConstruct
-    public void init() {
+    @Override
+    public void run(String... args) throws Exception {
+        // TODO Auto-generated method stub
+
         User user = new User();
         user.setId(1L);
         user.setUuid("user-33cdbbdd-75ed-44e3-8007-db8b7b8c3808");
@@ -56,7 +63,7 @@ public class UserLoader {
         user.addRole(new Role(Authority.USER));
         user.addRole(new Role(Authority.ADMIN));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
 
         user = new User();
         user.setId(2L);
@@ -83,7 +90,7 @@ public class UserLoader {
         user.setAddress(address);
         user.addRole(new Role(Authority.ADMIN));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
 
         user = new User();
         user.setId(3L);
@@ -110,7 +117,7 @@ public class UserLoader {
         user.setAddress(address);
         user.addRole(new Role(Authority.USER));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
 
         user = new User();
         user.setId(4L);
@@ -138,7 +145,7 @@ public class UserLoader {
         user.addRole(new Role(Authority.USER));
         user.addRole(new Role(Authority.ADMIN));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
 
         user = new User();
         user.setId(5L);
@@ -165,7 +172,7 @@ public class UserLoader {
         user.setAddress(address);
         user.addRole(new Role(Authority.USER));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
 
         user = new User();
         user.setId(6L);
@@ -192,7 +199,8 @@ public class UserLoader {
         user.setAddress(address);
         user.addRole(new Role(Authority.ADMIN));
 
-        userRepository.saveAndFlush(user);
+        userDAO.save(user);
+
     }
 
 }

@@ -17,7 +17,7 @@ import com.lovemesomecoding.enitity.user.session.UserSessionService;
 import com.lovemesomecoding.exception.ApiErrorResponse;
 import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.security.jwt.JwtPayload;
-import com.lovemesomecoding.security.jwt.JwtTokenUtils;
+import com.lovemesomecoding.security.jwt.JwtTokenService;
 import com.lovemesomecoding.utils.ApiSessionUtils;
 import com.lovemesomecoding.utils.HttpUtils;
 import com.lovemesomecoding.utils.ObjMapperUtils;
@@ -53,6 +53,9 @@ public class AuthenticationServiceImp implements AuthenticationService {
 
     @Autowired
     private UserSessionService  userSessionService;
+    
+    @Autowired
+    private JwtTokenService       jwtTokenService;
 
     @Override
     public AuthenticationResponseDTO authenticate(User user) {
@@ -60,7 +63,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         String userAgent = HttpUtils.getRequestUserAgent(request);
         String userIPAddress = HttpUtils.getRequestIP(request);
 
-        String jwtToken = JwtTokenUtils.generateToken(new JwtPayload(RandomGeneratorUtils.getJWTId(), user.getUuid()));
+        String jwtToken = jwtTokenService.generateToken(new JwtPayload(RandomGeneratorUtils.getJWTId(), user.getUuid()));
 
         AuthenticationResponseDTO authenticatedSessionDTO = entityMapper.mapUserToUserAuthSuccessDTO(user);
         authenticatedSessionDTO.setToken(jwtToken);

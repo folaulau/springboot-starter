@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.lovemesomecoding.cache.CacheService;
 import com.lovemesomecoding.exception.ApiErrorResponse;
 import com.lovemesomecoding.security.jwt.JwtPayload;
-import com.lovemesomecoding.security.jwt.JwtTokenUtils;
+import com.lovemesomecoding.security.jwt.JwtTokenService;
 import com.lovemesomecoding.utils.ApiSessionUtils;
 import com.lovemesomecoding.utils.HttpUtils;
 import com.lovemesomecoding.utils.ObjMapperUtils;
@@ -32,6 +32,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private JwtTokenService       jwtTokenService;
 
     /**
      * @author fkaveinga
@@ -58,7 +61,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        JwtPayload jwtPayload = JwtTokenUtils.getPayloadByToken(token);
+        JwtPayload jwtPayload = jwtTokenService.getPayloadByToken(token);
 
         boolean authorized = authenticationService.authorizeRequest(token, jwtPayload);
 

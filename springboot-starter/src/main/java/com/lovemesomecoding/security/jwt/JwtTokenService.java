@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -14,8 +15,9 @@ import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Component
 @Slf4j
-public final class JwtTokenUtils {
+public class JwtTokenService {
 
     private static final String      secret    = "pizzaria-api-springboot";
 
@@ -34,7 +36,7 @@ public final class JwtTokenUtils {
      *            - JwtPayload
      * @return token - String
      */
-    public static String generateToken(JwtPayload payload) {
+    public String generateToken(JwtPayload payload) {
 
         try {
             String token = JWT.create()
@@ -54,7 +56,7 @@ public final class JwtTokenUtils {
         }
     }
 
-    public static JwtPayload getPayloadByToken(String token) {
+    public JwtPayload getPayloadByToken(String token) {
         if (token == null || token.length() == 0) {
             return null;
         }

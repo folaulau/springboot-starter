@@ -7,7 +7,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.lovemesomecoding.security.jwt.JwtPayload;
-import com.lovemesomecoding.security.jwt.JwtTokenUtils;
+import com.lovemesomecoding.security.jwt.JwtTokenService;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtTokenUtilsTests {
 
+    JwtTokenService jwtTokenService = new JwtTokenService();
     @Test
     public void test_generateToken_valid() {
         String jti = "test-jti";
@@ -22,7 +23,7 @@ public class JwtTokenUtilsTests {
 
         JwtPayload payload = new JwtPayload(jti, uuid);
 
-        String token = JwtTokenUtils.generateToken(payload);
+        String token = jwtTokenService.generateToken(payload);
 
         assertThat(token).isNotNull();
         assertThat(token.length()).isGreaterThan(0);
@@ -33,7 +34,7 @@ public class JwtTokenUtilsTests {
 
         JwtPayload payload = null;
 
-        String token = JwtTokenUtils.generateToken(payload);
+        String token = jwtTokenService.generateToken(payload);
 
         assertThat(token).isNull();
     }
@@ -46,14 +47,14 @@ public class JwtTokenUtilsTests {
 
         log.info("payload={}", ObjMapperUtils.toJson(payload));
 
-        String token = JwtTokenUtils.generateToken(payload);
+        String token = jwtTokenService.generateToken(payload);
 
         log.info("token={}", token);
 
         assertThat(token).isNotNull();
         assertThat(token.length()).isGreaterThan(0);
 
-        JwtPayload updatedPayload = JwtTokenUtils.getPayloadByToken(token);
+        JwtPayload updatedPayload = jwtTokenService.getPayloadByToken(token);
 
         log.info("updatedPayload={}", ObjMapperUtils.toJson(updatedPayload));
 

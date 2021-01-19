@@ -34,6 +34,7 @@ import com.lovemesomecoding.dto.UserSessionDTO;
 import com.lovemesomecoding.dto.UserUpdateDTO;
 import com.lovemesomecoding.enitity.user.session.UserSession;
 import com.lovemesomecoding.enitity.user.session.UserSessionService;
+import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import io.swagger.annotations.Api;
@@ -88,6 +89,10 @@ public class UserRestController {
         UserDTO userDTO = userService.getByUuid(uuid);
 
         log.info("userDTO={}", ObjMapperUtils.toJson(userDTO));
+        
+        if(userDTO==null) {
+            throw new ApiException("User not found", "User not found by uuid="+uuid);
+        }
 
         return new ResponseEntity<>(userDTO, OK);
     }
