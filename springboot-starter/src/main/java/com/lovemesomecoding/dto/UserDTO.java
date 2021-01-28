@@ -1,6 +1,8 @@
 package com.lovemesomecoding.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,7 +45,7 @@ public class UserDTO implements Serializable {
 
     private Boolean           phoneVerified;
 
-    private Date              dateOfBirth;
+    private LocalDate         dateOfBirth;
 
     private UserStatus        status;
 
@@ -53,7 +55,7 @@ public class UserDTO implements Serializable {
 
     private String            coverImageUrl;
 
-    private Date              passwordExpirationDate;
+    private LocalDate         passwordExpirationDate;
 
     private Integer           invalidPasswordCounter = 0;
 
@@ -63,13 +65,12 @@ public class UserDTO implements Serializable {
 
     private boolean           deleted;
 
-    private Date              createdAt;
+    private LocalDateTime     createdAt;
 
-    private Date              updatedAt;
+    private LocalDateTime     updatedAt;
 
     private Long              createdBy;
 
     private Long              updatedBy;
-
 
 }

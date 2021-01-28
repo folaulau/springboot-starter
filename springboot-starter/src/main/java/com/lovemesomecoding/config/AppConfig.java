@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lovemesomecoding.utils.Constants;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
@@ -21,8 +24,6 @@ public class AppConfig {
     @Primary
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = ObjMapperUtils.getObjectMapper();
-        // Date and Time Format
-        objectMapper.setDateFormat(new SimpleDateFormat(Constants.UTC_DATETIME_PATTERN, Locale.US));
         return objectMapper;
     }
 }

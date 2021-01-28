@@ -43,6 +43,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class ObjMapperUtils {
 
@@ -68,15 +69,13 @@ public class ObjMapperUtils {
         objectMapper.setSerializationInclusion(Include.NON_NULL);
 
         // Date and Time Format
-        objectMapper.setDateFormat(getSidecarDateForm());
         objectMapper.setTimeZone(TimeZone.getTimeZone("UTC"));
+        // format LocalDate and LocalDateTime
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.setDateFormat(new SimpleDateFormat(Constants.UTC_DATETIME_PATTERN, Locale.US));
 
         objectMapper.setSerializationInclusion(Include.NON_NULL);
         return objectMapper;
-    }
-
-    public static DateFormat getSidecarDateForm() {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
     }
 
     public static ObjectNode getObjectNode() {

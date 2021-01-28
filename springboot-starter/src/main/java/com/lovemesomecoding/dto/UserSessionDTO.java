@@ -1,7 +1,16 @@
 package com.lovemesomecoding.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Lob;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.AllArgsConstructor;
@@ -30,6 +39,14 @@ public class UserSessionDTO implements Serializable {
 
     private String            userAgent;
 
+    private String            deviceAppName;
+
+    private String            deviceAppVersion;
+
+    private String            deviceOSName;
+
+    private String            deviceOSVersion;
+
     private String            ipAddress;
 
     private String            country;
@@ -52,11 +69,16 @@ public class UserSessionDTO implements Serializable {
 
     private Double            lng;
 
-    private Date              loginTime;
+    private LocalDateTime     loginTime;
 
-    private Date              logoutTime;
+    private LocalDateTime     logoutTime;
 
-    private Date              expired;
+    private LocalDateTime     expiredAt;
 
     private Boolean           active;
+
+    private LocalDateTime     createdAt;
+
+    private LocalDateTime     updatedAt;
+
 }

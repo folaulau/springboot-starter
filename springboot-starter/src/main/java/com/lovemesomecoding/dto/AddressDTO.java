@@ -1,7 +1,13 @@
 package com.lovemesomecoding.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import javax.persistence.Column;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -43,4 +49,8 @@ public class AddressDTO implements Serializable {
     private Double            latitude;
 
     private String            timezone;
+
+    private LocalDateTime     createdAt;
+
+    private LocalDateTime     updatedAt;
 }
