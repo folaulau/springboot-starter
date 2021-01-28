@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -55,6 +56,10 @@ public class ApiSession implements Serializable {
         // expire next 24 hours
         this.setExpiredTime(DateUtils.addHours(new Date(), 24));
         return this;
+    }
+
+    public String getRolesAsStr() {
+        return String.join(",", this.userRoles);
     }
 
 }

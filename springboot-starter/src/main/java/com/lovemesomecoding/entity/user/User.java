@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -34,12 +35,18 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lovemesomecoding.dto.helper.ApiSession;
 import com.lovemesomecoding.entity.address.Address;
+import com.lovemesomecoding.entity.listener.UserListener;
 import com.lovemesomecoding.entity.user.role.Role;
+import com.lovemesomecoding.utils.ApiSessionUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -147,8 +154,25 @@ public class User implements Serializable {
     private LocalDateTime     createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime     updatedAt;
+    @Column(name = "last_updated_at", nullable = false)
+    private LocalDateTime     lastUpdatedAt;
+
+    /*
+     * uuid of the user creating this user
+     */
+    @CreatedBy
+    @Column(name = "created_by_user", updatable = false)
+    private String            createdByUser;
+
+    /*
+     * uuid of the user updating this user
+     */
+    @LastModifiedBy
+    @Column(name = "last_updated_by_user")
+    private String            lastUpdatedByUser;
+
+    @Column(name = "last_updated_by_user_type")
+    private String            lastUpdatedByUserType;
 
     public User(long id) {
         this.id = id;
@@ -170,11 +194,32 @@ public class User implements Serializable {
         if (this.uuid == null || this.uuid.isEmpty()) {
             this.uuid = "user-" + UUID.randomUUID().toString();
         }
+
+        ApiSession currentUser = ApiSessionUtils.getApiSession();
+
+        if (currentUser != null) {
+            this.createdByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUserType = currentUser.getRolesAsStr();
+        } else {
+            this.createdByUser = "SYSTEM";
+            this.lastUpdatedByUser = "SYSTEM";
+            this.lastUpdatedByUserType = "SYSTEM";
+        }
+
     }
 
     @PreUpdate
     private void preUpdate() {
+        ApiSession currentUser = ApiSessionUtils.getApiSession();
 
+        if (currentUser != null) {
+            this.lastUpdatedByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUserType = currentUser.getRolesAsStr();
+        } else {
+            this.lastUpdatedByUser = "SYSTEM";
+            this.lastUpdatedByUserType = "SYSTEM";
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package com.lovemesomecoding.config;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -23,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Profile({"local", "dev", "prod"})
 @Configuration
+// @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class DatabaseConfig {
 
     @Value("${spring.datasource.username}")
@@ -67,6 +72,21 @@ public class DatabaseConfig {
 
         return hds;
     }
+
+    // @Bean
+    // public AuditorAware<String> auditorAware() {
+    // return new AuditorAware<String>() {
+    //
+    // @Override
+    // public Optional<String> getCurrentAuditor() {
+    // String user = "SYSTEM";
+    //
+    // return Optional.ofNullable(user);
+    //
+    // }
+    //
+    // };
+    // }
 
     // /**
     // * Override default flyway initializer to do nothing

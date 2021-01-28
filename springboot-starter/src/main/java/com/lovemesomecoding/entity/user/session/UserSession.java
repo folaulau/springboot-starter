@@ -3,6 +3,8 @@ package com.lovemesomecoding.entity.user.session;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -19,9 +23,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lovemesomecoding.dto.helper.ApiSession;
+import com.lovemesomecoding.utils.ApiSessionUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -129,6 +138,23 @@ public class UserSession implements Serializable {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime     updatedAt;
 
+    /*
+     * uuid of the user creating this user
+     */
+    @CreatedBy
+    @Column(name = "created_by_user", updatable = false)
+    private String            createdByUser;
+
+    /*
+     * uuid of the user updating this user
+     */
+    @LastModifiedBy
+    @Column(name = "last_updated_by_user")
+    private String            lastUpdatedByUser;
+
+    @Column(name = "last_updated_by_user_type")
+    private String            lastUpdatedByUserType;
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -152,6 +178,35 @@ public class UserSession implements Serializable {
         }
         UserSession other = (UserSession) obj;
         return new EqualsBuilder().append(this.id, other.id).append(this.authToken, other.authToken).isEquals();
+    }
+
+    @PrePersist
+    private void preCreate() {
+        ApiSession currentUser = ApiSessionUtils.getApiSession();
+
+        if (currentUser != null) {
+            this.createdByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUserType = currentUser.getRolesAsStr();
+        } else {
+            this.createdByUser = "SYSTEM";
+            this.lastUpdatedByUser = "SYSTEM";
+            this.lastUpdatedByUserType = "SYSTEM";
+        }
+
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        ApiSession currentUser = ApiSessionUtils.getApiSession();
+
+        if (currentUser != null) {
+            this.lastUpdatedByUser = currentUser.getUserUuid();
+            this.lastUpdatedByUserType = currentUser.getRolesAsStr();
+        } else {
+            this.lastUpdatedByUser = "SYSTEM";
+            this.lastUpdatedByUserType = "SYSTEM";
+        }
     }
 
 }
