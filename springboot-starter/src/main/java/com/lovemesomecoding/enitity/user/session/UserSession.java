@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(value = Include.NON_NULL)
+@DynamicUpdate
 @Entity
 @Table(name = "user_session", indexes = {@Index(columnList = "user_id"), @Index(columnList = "user_uuid")})
 public class UserSession implements Serializable {
