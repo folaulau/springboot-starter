@@ -1,5 +1,7 @@
 package com.lovemesomecoding.entity.user.session;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class UserSessionServiceImp implements UserSessionService {
     public boolean signIn(UserSession memberSession) {
         log.debug("signIn(..)");
         memberSession.setActive(true);
-        memberSession.setLoginTime(new Date());
+        memberSession.setLoginTime(LocalDateTime.now());
 
         memberSession = this.save(memberSession);
         return true;
@@ -42,7 +44,7 @@ public class UserSessionServiceImp implements UserSessionService {
         UserSession memberSession = userSessionRepository.findByAuthToken(authToken);
 
         if (memberSession != null && memberSession.getId() != null && memberSession.getId() > 0) {
-            memberSession.setLogoutTime(new Date());
+            memberSession.setLogoutTime(LocalDateTime.now());
             memberSession.setActive(false);
             this.save(memberSession);
             return true;
@@ -55,7 +57,7 @@ public class UserSessionServiceImp implements UserSessionService {
     public void expire(String authToken) {
         UserSession memberSession = userSessionRepository.findByAuthToken(authToken);
         if (memberSession != null && memberSession.getId() != null && memberSession.getId() > 0) {
-            memberSession.setExpired(new Date());
+            memberSession.setExpiredAt(LocalDateTime.now());
             memberSession.setActive(false);
             this.save(memberSession);
         }

@@ -1,6 +1,7 @@
 package com.lovemesomecoding.entity.user.role;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,14 +63,12 @@ public class Role implements Serializable {
     private Set<User>         users;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", updatable = false, nullable = false)
-    private Date              createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime     createdAt;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", updatable = true, nullable = false)
-    private Date              updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime     updatedAt;
 
     public Role(Authority authority) {
         this(null, authority);

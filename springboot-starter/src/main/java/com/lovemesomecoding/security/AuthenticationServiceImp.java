@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         userSession.setUserId(user.getId());
         userSession.setUserUuid(user.getUuid());
         userSession.setAuthToken(jwtToken);
-        userSession.setLoginTime(new Date());
+        userSession.setLoginTime(LocalDateTime.now());
         userSession.setUserAgent(userAgent);
 
         userSessionService.signIn(userSession);

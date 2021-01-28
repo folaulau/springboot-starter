@@ -1,9 +1,9 @@
 package com.lovemesomecoding.entity.user;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,8 +26,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
@@ -100,9 +98,8 @@ public class User implements Serializable {
     @Column(name = "phone_verified")
     private Boolean           phoneVerified;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth")
-    private Date              dateOfBirth;
+    private LocalDate         dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "marital_status")
@@ -126,9 +123,8 @@ public class User implements Serializable {
     @Column(name = "cover_image_url")
     private String            coverImageUrl;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "password_expiration_date", nullable = false, updatable = true)
-    private Date              passwordExpirationDate;
+    @Column(name = "password_expiration_date")
+    private LocalDate         passwordExpirationDate;
 
     @Column(name = "invalid_password_counter")
     private Integer           invalidPasswordCounter = 0;
@@ -147,14 +143,12 @@ public class User implements Serializable {
     private boolean           deleted;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date              createdAt;
+    private LocalDateTime     createdAt;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false, updatable = true)
-    private Date              updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime     updatedAt;
 
     public User(long id) {
         this.id = id;

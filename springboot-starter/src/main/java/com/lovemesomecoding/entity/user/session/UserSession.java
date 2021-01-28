@@ -1,6 +1,7 @@
 package com.lovemesomecoding.entity.user.session;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -105,18 +108,26 @@ public class UserSession implements Serializable {
     private Double            lng;
     // ======================*location*=======================
 
-    @Column(name = "log_in_time", nullable = false, updatable = false)
-    private Date              loginTime;
+    @Column(name = "log_in_time")
+    private LocalDateTime     loginTime;
 
-    @Column(name = "log_out_time", nullable = true, updatable = true)
-    private Date              logoutTime;
+    @Column(name = "log_out_time")
+    private LocalDateTime     logoutTime;
 
-    @Column(name = "time_expired", nullable = true, updatable = true)
-    private Date              expired;
+    @Column(name = "expired_at")
+    private LocalDateTime     expiredAt;
 
     @Type(type = "true_false")
     @Column(name = "active", nullable = false, updatable = true)
     private Boolean           active;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime     createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime     updatedAt;
 
     @Override
     public String toString() {
