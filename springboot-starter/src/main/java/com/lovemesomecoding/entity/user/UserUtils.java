@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.entity.user;
 
 import com.lovemesomecoding.dto.SignUpDTO;
 import com.lovemesomecoding.exception.ApiErrorResponse;

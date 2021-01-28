@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.entity.user;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -32,8 +32,8 @@ import com.lovemesomecoding.dto.SignUpDTO;
 import com.lovemesomecoding.dto.UserDTO;
 import com.lovemesomecoding.dto.UserSessionDTO;
 import com.lovemesomecoding.dto.UserUpdateDTO;
-import com.lovemesomecoding.enitity.user.session.UserSession;
-import com.lovemesomecoding.enitity.user.session.UserSessionService;
+import com.lovemesomecoding.entity.user.session.UserSession;
+import com.lovemesomecoding.entity.user.session.UserSessionService;
 import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 

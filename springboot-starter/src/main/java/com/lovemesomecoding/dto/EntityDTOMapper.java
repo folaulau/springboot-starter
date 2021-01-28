@@ -9,8 +9,8 @@ import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import com.lovemesomecoding.enitity.user.User;
-import com.lovemesomecoding.enitity.user.session.UserSession;
+import com.lovemesomecoding.entity.user.User;
+import com.lovemesomecoding.entity.user.session.UserSession;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EntityDTOMapper {

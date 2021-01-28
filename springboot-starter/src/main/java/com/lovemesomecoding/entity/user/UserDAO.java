@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.entity.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

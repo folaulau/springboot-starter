@@ -1,7 +1,7 @@
 package com.lovemesomecoding.security;
 
 import com.lovemesomecoding.dto.AuthenticationResponseDTO;
-import com.lovemesomecoding.enitity.user.User;
+import com.lovemesomecoding.entity.user.User;
 import com.lovemesomecoding.security.jwt.JwtPayload;
 
 public interface AuthenticationService {

@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.entity.user;
 
 import java.io.Serializable;
 import java.util.Date;

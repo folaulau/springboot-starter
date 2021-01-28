@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user.session;
+package com.lovemesomecoding.entity.user.session;
 
 import java.util.List;
 

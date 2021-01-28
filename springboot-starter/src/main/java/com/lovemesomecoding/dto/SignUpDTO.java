@@ -8,7 +8,7 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.lovemesomecoding.enitity.user.UserGender;
+import com.lovemesomecoding.entity.user.UserGender;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

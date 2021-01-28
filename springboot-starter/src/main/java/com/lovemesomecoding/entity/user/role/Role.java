@@ -28,7 +28,7 @@ import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.lovemesomecoding.enitity.user.User;
+import com.lovemesomecoding.entity.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

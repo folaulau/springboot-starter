@@ -6,7 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.lovemesomecoding.enitity.user.UserStatus;
+import com.lovemesomecoding.entity.user.UserStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

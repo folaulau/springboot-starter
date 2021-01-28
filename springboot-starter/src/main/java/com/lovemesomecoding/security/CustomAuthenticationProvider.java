@@ -13,9 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.lovemesomecoding.enitity.user.User;
-import com.lovemesomecoding.enitity.user.UserDAO;
-import com.lovemesomecoding.enitity.user.UserStatus;
+import com.lovemesomecoding.entity.user.User;
+import com.lovemesomecoding.entity.user.UserDAO;
+import com.lovemesomecoding.entity.user.UserStatus;
 import com.lovemesomecoding.utils.PasswordUtils;
 
 import lombok.extern.slf4j.Slf4j;

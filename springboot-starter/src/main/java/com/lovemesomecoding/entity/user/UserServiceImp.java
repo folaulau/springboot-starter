@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user;
+package com.lovemesomecoding.entity.user;
 
 import java.io.File;
 import java.io.IOException;

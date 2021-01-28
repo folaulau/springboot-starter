@@ -23,11 +23,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.lovemesomecoding.enitity.user.User;
-import com.lovemesomecoding.enitity.user.UserDAO;
-import com.lovemesomecoding.enitity.user.UserGender;
-import com.lovemesomecoding.enitity.user.UserMaritalStatus;
-import com.lovemesomecoding.enitity.user.UserStatus;
+import com.lovemesomecoding.entity.user.User;
+import com.lovemesomecoding.entity.user.UserDAO;
+import com.lovemesomecoding.entity.user.UserGender;
+import com.lovemesomecoding.entity.user.UserMaritalStatus;
+import com.lovemesomecoding.entity.user.UserStatus;
 import com.lovemesomecoding.security.AuthenticationService;
 import com.lovemesomecoding.security.jwt.JwtPayload;
 import com.lovemesomecoding.security.jwt.JwtTokenService;

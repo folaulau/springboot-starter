@@ -1,4 +1,4 @@
-package com.lovemesomecoding.enitity.user.session;
+package com.lovemesomecoding.entity.user.session;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

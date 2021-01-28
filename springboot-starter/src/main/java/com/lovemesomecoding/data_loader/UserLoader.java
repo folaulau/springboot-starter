@@ -11,12 +11,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.lovemesomecoding.enitity.user.User;
-import com.lovemesomecoding.enitity.user.UserDAO;
-import com.lovemesomecoding.enitity.user.UserGender;
-import com.lovemesomecoding.enitity.user.UserMaritalStatus;
-import com.lovemesomecoding.enitity.user.UserStatus;
 import com.lovemesomecoding.entity.address.Address;
+import com.lovemesomecoding.entity.user.User;
+import com.lovemesomecoding.entity.user.UserDAO;
+import com.lovemesomecoding.entity.user.UserGender;
+import com.lovemesomecoding.entity.user.UserMaritalStatus;
+import com.lovemesomecoding.entity.user.UserStatus;
 import com.lovemesomecoding.entity.user.role.Authority;
 import com.lovemesomecoding.entity.user.role.Role;
 import com.lovemesomecoding.utils.PasswordUtils;

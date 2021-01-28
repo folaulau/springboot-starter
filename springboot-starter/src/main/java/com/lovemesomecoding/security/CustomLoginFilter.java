@@ -26,7 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.lovemesomecoding.cache.CacheService;
 import com.lovemesomecoding.dto.AuthenticationResponseDTO;
-import com.lovemesomecoding.enitity.user.User;
+import com.lovemesomecoding.entity.user.User;
 import com.lovemesomecoding.exception.ApiErrorResponse;
 import com.lovemesomecoding.utils.HttpUtils;
 import com.lovemesomecoding.utils.ObjMapperUtils;
