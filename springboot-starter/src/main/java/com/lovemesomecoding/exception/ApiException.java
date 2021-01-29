@@ -28,7 +28,7 @@ public class ApiException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    private ApiError  error;
+    private ApiError          error;
 
     public ApiException() {
     }
@@ -56,6 +56,11 @@ public class ApiException extends RuntimeException {
     public ApiException(HttpStatus status, String message, List<String> subErrors) {
         super(message);
         this.error = new ApiError(status, message, subErrors);
+    }
+
+    public ApiException(Throwable ex, String message, String... subErrors) {
+        super(message);
+        this.error = new ApiError(message, ex, subErrors);
     }
 
 }

@@ -30,13 +30,21 @@ public class ApiError extends ApiDefaultResponseDTO {
 
     public static final String DEFAULT_MSG = "Something went wrong. Please try again.";
 
+    /**
+     * Runtime exception message
+     */
     private String             debugMessage;
 
+    /**
+     * Error messages
+     */
     private List<ApiSubError>  errors;
 
     /**
-     * Internal use only, not visible to clients
+     * In case, you want to customize error status.<br>
+     * It's default to 400 or BAD_REQUEST
      */
+    @JsonIgnore
     private HttpStatus         status;
 
     public ApiError() {
@@ -63,15 +71,10 @@ public class ApiError extends ApiDefaultResponseDTO {
         this(status, message, debugMessage, subErrors, null);
     }
 
+
     /**
      * Form validation errors
      */
-    public ApiError(HttpStatus status, String message, List<ApiSubError> errors, Throwable ex) {
-        super(message);
-        this.debugMessage = (debugMessage != null) ? debugMessage : (ex != null) ? ex.getLocalizedMessage() : null;
-        this.errors = errors;
-        this.status = status;
-    }
 
     public ApiError(String message, List<ApiSubError> errors, Throwable ex) {
         super(message);
@@ -80,9 +83,6 @@ public class ApiError extends ApiDefaultResponseDTO {
         this.status = HttpStatus.BAD_REQUEST;
     }
 
-    /**
-     * Form validation errors
-     */
     public ApiError(String message, Throwable ex, String... subErrors) {
         super(message);
         this.debugMessage = (debugMessage != null) ? debugMessage : (ex != null) ? ex.getLocalizedMessage() : null;
