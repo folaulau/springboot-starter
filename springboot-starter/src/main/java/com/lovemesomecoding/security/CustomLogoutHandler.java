@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class CustomLogoutHandler implements LogoutHandler {
                 log.debug("Error message: {}", message);
 
                 ObjMapperUtils.getObjectMapper()
-                        .writeValue(response.getWriter(), new ApiErrorResponse(HttpStatus.BAD_REQUEST, message, "Session not found for requested token", "Token might have been logged out already"));
+                        .writeValue(response.getWriter(), new ApiError(HttpStatus.BAD_REQUEST, message, "Session not found for requested token", "Token might have been logged out already"));
 
                 return;
             } catch (IOException e) {

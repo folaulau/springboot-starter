@@ -28,7 +28,7 @@ import com.lovemesomecoding.entity.user.UserService;
 import com.lovemesomecoding.entity.user.UserServiceImp;
 import com.lovemesomecoding.entity.user.role.Authority;
 import com.lovemesomecoding.entity.user.role.Role;
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.security.AuthenticationService;
 import com.lovemesomecoding.utils.ObjMapperUtils;
@@ -64,7 +64,7 @@ public class SignupMockTests {
             userService.signUp(null);
         });
 
-        ApiErrorResponse error = apiException.getError();
+        ApiError error = apiException.getError();
 
         assertThat(error).isNotNull();
 
@@ -82,7 +82,7 @@ public class SignupMockTests {
             userService.signUp(signUpDTO);
         });
 
-        ApiErrorResponse error = apiException.getError();
+        ApiError error = apiException.getError();
 
         assertThat(error).isNotNull();
 
@@ -100,7 +100,7 @@ public class SignupMockTests {
             userService.signUp(signUpDTO);
         });
 
-        ApiErrorResponse error = apiException.getError();
+        ApiError error = apiException.getError();
 
         assertThat(error).isNotNull();
 

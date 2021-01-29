@@ -13,7 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -27,7 +27,7 @@ public class CustomAcccessDeniedHandler implements AccessDeniedHandler {
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		log.info("access denied");
 		response.setStatus(UNAUTHORIZED.value());
-        ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiErrorResponse(ApiErrorResponse.FAILURE));
+        ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiError(ApiError.FAILURE));
 	}
 
 }

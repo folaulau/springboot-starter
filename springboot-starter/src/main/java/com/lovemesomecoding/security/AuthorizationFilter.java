@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.lovemesomecoding.cache.CacheService;
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.security.jwt.JwtPayload;
 import com.lovemesomecoding.security.jwt.JwtTokenService;
 import com.lovemesomecoding.utils.ApiSessionUtils;
@@ -56,7 +56,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             String message = "Missing token in header";
             log.debug("Error message: {}, context path: {}, url: {}", message, request.getContextPath(), request.getRequestURI());
 
-            ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiErrorResponse(UNAUTHORIZED, "Access Denied", Collections.singletonList(message)));
+            ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiError(UNAUTHORIZED, "Access Denied", Collections.singletonList(message)));
 
             return;
         }

@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = NotInvalidAmountValidator.class)
 public @interface NotInvalidAmount {
 
-	String message() default "not a valid amount";
+    String message() default "Invalid amount";
 
 	Class<?>[] groups() default {};
 

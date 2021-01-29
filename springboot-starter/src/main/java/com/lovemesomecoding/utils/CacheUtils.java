@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.exception.ApiException;
 
 public class CacheUtils {
@@ -39,7 +39,7 @@ public class CacheUtils {
         } else {
             log.info("Cache not found for key:{}", key);
 
-            throw new ApiException(new ApiErrorResponse(HttpStatus.BAD_REQUEST, "Cache, " + key + " not found"));
+            throw new ApiException(new ApiError(HttpStatus.BAD_REQUEST, "Cache, " + key + " not found"));
         }
 
         return cacheCleared;

@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = FutureStartDateValidator.class)
 public @interface FutureStartDate {
 
-	String message() default "is in valid. It must be more than 14 days";
+    String message() default "Invalid future date";
 
 	Class<?>[] groups() default {};
 

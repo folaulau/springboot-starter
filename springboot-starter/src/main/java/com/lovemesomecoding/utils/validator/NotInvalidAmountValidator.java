@@ -1,10 +1,6 @@
 package com.lovemesomecoding.utils.validator;
-import java.util.Date;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.apache.commons.lang3.time.DateUtils;
 
 public class NotInvalidAmountValidator implements ConstraintValidator<NotInvalidAmount, Double> {
 

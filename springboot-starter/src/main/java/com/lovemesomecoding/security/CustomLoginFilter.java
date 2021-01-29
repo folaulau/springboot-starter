@@ -27,7 +27,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.lovemesomecoding.cache.CacheService;
 import com.lovemesomecoding.dto.AuthenticationResponseDTO;
 import com.lovemesomecoding.entity.user.User;
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.utils.HttpUtils;
 import com.lovemesomecoding.utils.ObjMapperUtils;
 
@@ -156,7 +156,7 @@ public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         ObjMapperUtils.getObjectMapper()
                 .writeValue(response.getWriter(),
-                        new ApiErrorResponse(BAD_REQUEST, StringUtils.defaultString(message, ApiErrorResponse.DEFAULT_MSG), Arrays.asList(message, "I suggest you take a walk to clear your mind")));
+                        new ApiError(BAD_REQUEST, StringUtils.defaultString(message, ApiError.DEFAULT_MSG), Arrays.asList(message, "I suggest you take a walk to clear your mind")));
     }
 
 }

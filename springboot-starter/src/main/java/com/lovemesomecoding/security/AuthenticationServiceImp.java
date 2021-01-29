@@ -14,7 +14,7 @@ import com.lovemesomecoding.dto.helper.ApiSession;
 import com.lovemesomecoding.entity.user.User;
 import com.lovemesomecoding.entity.user.session.UserSession;
 import com.lovemesomecoding.entity.user.session.UserSessionService;
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.security.jwt.JwtPayload;
 import com.lovemesomecoding.security.jwt.JwtTokenService;
@@ -129,7 +129,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
             log.debug("Error message: {}, context path: {}, url: {}", message, request.getContextPath(), request.getRequestURI());
 
             try {
-                ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiErrorResponse(UNAUTHORIZED, "Access Denied", message, "Unable to verify token"));
+                ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiError(UNAUTHORIZED, "Access Denied", message, "Unable to verify token"));
             } catch (IOException e) {
                 log.warn("IOException, msg={}", e.getLocalizedMessage());
             }
@@ -147,7 +147,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
             log.debug("Token does not exist in cache. Error message: {}, context path: {}, url: {}", message, request.getContextPath(), request.getRequestURI());
 
             try {
-                ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiErrorResponse(UNAUTHORIZED, "Access Denied", message, "Session not found in cache for requested token"));
+                ObjMapperUtils.getObjectMapper().writeValue(response.getWriter(), new ApiError(UNAUTHORIZED, "Access Denied", message, "Session not found in cache for requested token"));
             } catch (IOException e) {
                 log.warn("IOException, msg={}", e.getLocalizedMessage());
             }
@@ -174,7 +174,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
             try {
                 ObjMapperUtils.getObjectMapper()
                         .writeValue(response.getWriter(),
-                                new ApiErrorResponse(UNAUTHORIZED, "Access Denied", message, "Token has been expired. expired at " + apiSession.getExpiredTime().toInstant().toString()));
+                                new ApiError(UNAUTHORIZED, "Access Denied", message, "Token has been expired. expired at " + apiSession.getExpiredTime().toInstant().toString()));
             } catch (IOException e) {
                 log.warn("IOException, msg={}", e.getLocalizedMessage());
             }

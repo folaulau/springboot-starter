@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = NotEmptyStringValidator.class)
 public @interface NotEmptyString {
 
-	String message() default "is empty";
+    String message() default "Invalid valud";
 
 	Class<?>[] groups() default {};
 

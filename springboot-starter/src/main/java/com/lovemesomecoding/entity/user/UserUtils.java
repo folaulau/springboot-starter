@@ -1,7 +1,7 @@
 package com.lovemesomecoding.entity.user;
 
 import com.lovemesomecoding.dto.SignUpDTO;
-import com.lovemesomecoding.exception.ApiErrorResponse;
+import com.lovemesomecoding.exception.ApiError;
 import com.lovemesomecoding.exception.ApiException;
 import com.lovemesomecoding.utils.ValidationUtils;
 
@@ -10,7 +10,7 @@ public interface UserUtils {
     public static void validateSignUp(SignUpDTO signUpDTO, UserDAO userDAO) {
 
         if (signUpDTO == null) {
-            throw new ApiException(ApiErrorResponse.DEFAULT_MSG, "Signup request data is empty");
+            throw new ApiException(ApiError.DEFAULT_MSG, "Signup request data is empty");
         }
 
         if (signUpDTO.getEmail() == null || ValidationUtils.isValidEmailFormat(signUpDTO.getEmail()) == false) {

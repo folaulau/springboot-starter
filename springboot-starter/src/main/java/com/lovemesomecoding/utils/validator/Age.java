@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = AgeValidator.class)
 public @interface Age {
 
-	String message() default "not a valid age";
+    String message() default "Invalid age";
 
 	Class<?>[] groups() default {};
 
