@@ -67,10 +67,6 @@ public class UserDTO implements Serializable {
 
     private LocalDateTime     createdAt;
 
-    private LocalDateTime     updatedAt;
-
-    private Long              createdBy;
-
-    private Long              updatedBy;
+    private LocalDateTime     lastUpdatedAt;
 
 }

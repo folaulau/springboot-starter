@@ -20,6 +20,7 @@ import com.lovemesomecoding.dto.EntityDTOMapper;
 import com.lovemesomecoding.dto.SignUpDTO;
 import com.lovemesomecoding.dto.UserDTO;
 import com.lovemesomecoding.dto.UserUpdateDTO;
+import com.lovemesomecoding.entity.email.EmailService;
 import com.lovemesomecoding.entity.user.role.Authority;
 import com.lovemesomecoding.entity.user.role.Role;
 import com.lovemesomecoding.security.AuthenticationService;
@@ -41,6 +42,9 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private EmailService          emailService;
 
     @Override
     public AuthenticationResponseDTO signUp(SignUpDTO signUpDTO) {
@@ -139,6 +143,15 @@ public class UserServiceImp implements UserService {
         UserDTO userDTO = entityMapper.mapUserToUserDTO(user);
 
         return userDTO;
+    }
+
+    @Override
+    public void sendMonthlyPaymentReminder(String userUuid) {
+        // TODO Auto-generated method stub
+
+        User user = userDAO.getByUuid(userUuid);
+
+        this.emailService.sendMonthlyPaymentReminder(user);
     }
 
 }
