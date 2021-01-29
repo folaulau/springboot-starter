@@ -63,4 +63,9 @@ public class ApiException extends RuntimeException {
         this.error = new ApiError(message, ex, subErrors);
     }
 
+    public ApiException(Throwable ex, String message) {
+        super(message);
+        this.error = new ApiError(message, ex);
+    }
+
 }

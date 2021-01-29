@@ -91,7 +91,7 @@ public class UserRestController {
         log.info("userDTO={}", ObjMapperUtils.toJson(userDTO));
         
         if(userDTO==null) {
-            throw new ApiException("User not found", "User not found by uuid="+uuid);
+            throw new ApiException("User not found", "User not found by uuid=" + uuid);
         }
 
         return new ResponseEntity<>(userDTO, OK);
